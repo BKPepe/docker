@@ -7,6 +7,16 @@ FILE_HOST="${UPSTREAM_URL:-${FILE_HOST:-https://downloads.openwrt.org}}"
 DOWNLOAD_FILE="${DOWNLOAD_FILE:-imagebuilder-.*x86_64.tar.[xz|zst]}"
 DOWNLOAD_PATH="$VERSION_PATH/targets/$TARGET"
 
+# Check if target with variant suffix exists on the host. If not, fallback to base target.
+if ! wget --spider -q "$FILE_HOST/$DOWNLOAD_PATH/sha256sums"; then
+	BASE_TARGET=$(echo "$TARGET" | cut -d "-" -f 1)
+	if [ "$BASE_TARGET" != "$TARGET" ]; then
+		echo "Target $TARGET not found on $FILE_HOST. Falling back to base target $BASE_TARGET..."
+		TARGET="$BASE_TARGET"
+		DOWNLOAD_PATH="$VERSION_PATH/targets/$TARGET"
+	fi
+fi
+
 wget -nv "$FILE_HOST/$DOWNLOAD_PATH/sha256sums" -O sha256sums
 wget -nv "$FILE_HOST/$DOWNLOAD_PATH/sha256sums.asc" -O sha256sums.asc
 
