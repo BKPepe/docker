@@ -77,6 +77,15 @@ jobs:
         run: |
           TARGET_FILTER="${{ github.event.inputs.target }}"
 
+          TARGETS_LIST=$(perl ./scripts/dump-target-info.pl targets 2>/dev/null)
+          # Append custom glibc and nls targets for x86/64
+          TARGETS_LIST="$TARGETS_LIST"$'\n'"x86/64-glibc x86_64"$'\n'"x86/64-nls x86_64"
+
+          # Filter targets if TARGET_FILTER is set
+          if [ -n "$TARGET_FILTER" ]; then
+            TARGETS_LIST=$(echo "$TARGETS_LIST" | grep -w "$TARGET_FILTER")
+          fi
+
           # imagebuilders & rootfs
           JSON_IB='['
           FIRST_IB=1
@@ -86,6 +95,7 @@ jobs:
 
           while read -r line;
           do
+            [ -n "$line" ] || continue
             TARGET=$(echo "$line" | cut -d " " -f 1)
             ARCH=$(echo "$line" | cut -d " " -f 2)
 
@@ -103,7 +113,7 @@ jobs:
               ;;
             esac
 
-          done <<< $(perl ./scripts/dump-target-info.pl targets 2>/dev/null | ([[ -n "$TARGET_FILTER" ]] && grep -w "$TARGET_FILTER" || cat))
+          done <<< "$TARGETS_LIST"
 
           JSON_IB='{"include":'"$JSON_IB"']}'
           echo -e "\n---- imagebuilders ----\n"
@@ -124,21 +134,33 @@ jobs:
 
           while read -r line;
           do
+            [ -n "$line" ] || continue
             TARGET=$(echo "$line" | cut -d " " -f 1)
             ARCH=$(echo "$line" | cut -d " " -f 2)
-            TARGET_TAG="${TARGET//\//-}"
 
+            SUBTARGET=$(echo "$TARGET" | cut -d "/" -f 2)
+            if [[ "$SUBTARGET" == *"-"* ]]; then
+              VARIANT=$(echo "$SUBTARGET" | cut -d "-" -f 2-)
+            else
+              VARIANT=""
+            fi
+
+            TARGET_TAG="${TARGET//\//-}"
             TAGS="$TARGET_TAG"
-            if [ -z "${ARCH_SEEN[$ARCH]+x}" ]; then
-              TAGS="$TARGET_TAG\n$ARCH"
-              ARCH_SEEN[$ARCH]=1
+            if [ -n "$VARIANT" ]; then
+              TAGS="$TARGET_TAG\n${ARCH}-${VARIANT}"
+            else
+              if [ -z "${ARCH_SEEN[$ARCH]+x}" ]; then
+                TAGS="$TARGET_TAG\n$ARCH"
+                ARCH_SEEN[$ARCH]=1
+              fi
             fi
 
             [[ $FIRST -ne 1 ]] && JSON="$JSON"','
             FIRST=0
 
             JSON="$JSON"'{"target":"'"$TARGET"'","tags":"'"$TAGS"'"}'
-          done <<< $(perl ./scripts/dump-target-info.pl targets 2>/dev/null | ([[ -n "$TARGET_FILTER" ]] && grep -w "$TARGET_FILTER" || cat))
+          done <<< "$TARGETS_LIST"
 
           JSON='{"include":'"$JSON"']}'
           echo -e "\n---- sdks ----\n"
