@@ -24,7 +24,7 @@ gpg --import /builder/keys/*.asc && rm -rf /builder/keys/
 gpg --with-fingerprint --verify sha256sums.asc sha256sums
 
 # determine archive name
-file_name="$(grep "$DOWNLOAD_FILE" sha256sums | cut -d "*" -f 2)"
+file_name="$(grep "$DOWNLOAD_FILE" sha256sums | cut -d "*" -f 2 | head -n 1)"
 
 # download imagebuilder/sdk archive
 wget -nv "$FILE_HOST/$DOWNLOAD_PATH/$file_name"
