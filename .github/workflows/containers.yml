@@ -3,6 +3,10 @@ run-name: ${{ inputs.ref }} ${{ inputs.target }}
 
 env:
   FILE_HOST: https://mirror-03.infra.openwrt.org
+  DOCKER_USER: ${{ secrets.DOCKER_USER }}
+  DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+  QUAY_USER: ${{ secrets.QUAY_USER }}
+  QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
 
 on:
   # push:
@@ -183,11 +187,6 @@ jobs:
     strategy:
       fail-fast: False
       matrix: ${{fromJson(needs.generate_matrix.outputs.imagebuilders)}}
-    env:
-      DOCKER_USER: ${{ secrets.DOCKER_USER }}
-      DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
-      QUAY_USER: ${{ secrets.QUAY_USER }}
-      QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
 
     steps:
       - name: Login to GitHub Container Registry
@@ -280,11 +279,6 @@ jobs:
     strategy:
       fail-fast: False
       matrix: ${{fromJson(needs.generate_matrix.outputs.sdks)}}
-    env:
-      DOCKER_USER: ${{ secrets.DOCKER_USER }}
-      DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
-      QUAY_USER: ${{ secrets.QUAY_USER }}
-      QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
 
     steps:
       - name: Login to GitHub Container Registry
@@ -443,11 +437,6 @@ jobs:
     strategy:
       fail-fast: False
       matrix: ${{fromJson(needs.generate_matrix.outputs.rootfs)}}
-    env:
-      DOCKER_USER: ${{ secrets.DOCKER_USER }}
-      DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
-      QUAY_USER: ${{ secrets.QUAY_USER }}
-      QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
 
     steps:
       - name: Set up QEMU
