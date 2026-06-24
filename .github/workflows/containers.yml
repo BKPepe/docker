@@ -194,14 +194,14 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Login to Docker.io Container Registry
-        if: github.event_name != 'pull_request' && github.repository_owner == 'openwrt'
+        if: github.event_name != 'pull_request' && secrets.DOCKER_USER != '' && secrets.DOCKER_TOKEN != ''
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Login to Quay.io Container Registry
-        if: github.event_name != 'pull_request' && github.repository_owner == 'openwrt'
+        if: github.event_name != 'pull_request' && secrets.QUAY_USER != '' && secrets.QUAY_TOKEN != ''
         uses: docker/login-action@v3
         with:
           registry: quay.io
@@ -214,8 +214,8 @@ jobs:
         with:
           images: |
             ghcr.io/${{ github.repository_owner }}/imagebuilder
-            ${{ github.repository_owner == 'openwrt' && 'docker.io/openwrt/imagebuilder' || '' }}
-            ${{ github.repository_owner == 'openwrt' && 'quay.io/openwrt/imagebuilder' || '' }}
+            ${{ secrets.DOCKER_USER != '' && format('docker.io/{0}/imagebuilder', secrets.DOCKER_USER) || '' }}
+            ${{ secrets.QUAY_USER != '' && format('quay.io/{0}/imagebuilder', secrets.QUAY_USER) || '' }}
           flavor: |
             latest=false
             prefix=${{ github.event.inputs.prefix }}
@@ -286,14 +286,14 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Login to Docker.io Container Registry
-        if: github.event_name != 'pull_request' && github.repository_owner == 'openwrt'
+        if: github.event_name != 'pull_request' && secrets.DOCKER_USER != '' && secrets.DOCKER_TOKEN != ''
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Login to Quay.io Container Registry
-        if: github.event_name != 'pull_request' && github.repository_owner == 'openwrt'
+        if: github.event_name != 'pull_request' && secrets.QUAY_USER != '' && secrets.QUAY_TOKEN != ''
         uses: docker/login-action@v3
         with:
           registry: quay.io
@@ -306,8 +306,8 @@ jobs:
         with:
           images: |
             ghcr.io/${{ github.repository_owner }}/sdk
-            ${{ github.repository_owner == 'openwrt' && 'docker.io/openwrt/sdk' || '' }}
-            ${{ github.repository_owner == 'openwrt' && 'quay.io/openwrt/sdk' || '' }}
+            ${{ secrets.DOCKER_USER != '' && format('docker.io/{0}/sdk', secrets.DOCKER_USER) || '' }}
+            ${{ secrets.QUAY_USER != '' && format('quay.io/{0}/sdk', secrets.QUAY_USER) || '' }}
           flavor: |
             latest=false
             prefix=${{ github.event.inputs.prefix }}
@@ -320,8 +320,8 @@ jobs:
         with:
           images: |
             ghcr.io/${{ github.repository_owner }}/sdk
-            ${{ github.repository_owner == 'openwrt' && 'docker.io/openwrt/sdk' || '' }}
-            ${{ github.repository_owner == 'openwrt' && 'quay.io/openwrt/sdk' || '' }}
+            ${{ secrets.DOCKER_USER != '' && format('docker.io/{0}/sdk', secrets.DOCKER_USER) || '' }}
+            ${{ secrets.QUAY_USER != '' && format('quay.io/{0}/sdk', secrets.QUAY_USER) || '' }}
           flavor: |
             latest=false
             prefix=${{ github.event.inputs.prefix }}
@@ -335,8 +335,8 @@ jobs:
         with:
           images: |
             ghcr.io/${{ github.repository_owner }}/sdk
-            ${{ github.repository_owner == 'openwrt' && 'docker.io/openwrt/sdk' || '' }}
-            ${{ github.repository_owner == 'openwrt' && 'quay.io/openwrt/sdk' || '' }}
+            ${{ secrets.DOCKER_USER != '' && format('docker.io/{0}/sdk', secrets.DOCKER_USER) || '' }}
+            ${{ secrets.QUAY_USER != '' && format('quay.io/{0}/sdk', secrets.QUAY_USER) || '' }}
           flavor: |
             latest=false
             prefix=${{ github.event.inputs.prefix }}
@@ -350,8 +350,8 @@ jobs:
         with:
           images: |
             ghcr.io/${{ github.repository_owner }}/sdk
-            ${{ github.repository_owner == 'openwrt' && 'docker.io/openwrt/sdk' || '' }}
-            ${{ github.repository_owner == 'openwrt' && 'quay.io/openwrt/sdk' || '' }}
+            ${{ secrets.DOCKER_USER != '' && format('docker.io/{0}/sdk', secrets.DOCKER_USER) || '' }}
+            ${{ secrets.QUAY_USER != '' && format('quay.io/{0}/sdk', secrets.QUAY_USER) || '' }}
           flavor: |
             latest=false
             prefix=${{ github.event.inputs.prefix }}
@@ -364,8 +364,8 @@ jobs:
         with:
           images: |
             ghcr.io/${{ github.repository_owner }}/sdk
-            ${{ github.repository_owner == 'openwrt' && 'docker.io/openwrt/sdk' || '' }}
-            ${{ github.repository_owner == 'openwrt' && 'quay.io/openwrt/sdk' || '' }}
+            ${{ secrets.DOCKER_USER != '' && format('docker.io/{0}/sdk', secrets.DOCKER_USER) || '' }}
+            ${{ secrets.QUAY_USER != '' && format('quay.io/{0}/sdk', secrets.QUAY_USER) || '' }}
           tags: latest
 
       - name: Build
@@ -453,14 +453,14 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Login to Docker.io Container Registry
-        if: github.event_name != 'pull_request' && github.repository_owner == 'openwrt'
+        if: github.event_name != 'pull_request' && secrets.DOCKER_USER != '' && secrets.DOCKER_TOKEN != ''
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Login to Quay.io Container Registry
-        if: github.event_name != 'pull_request' && github.repository_owner == 'openwrt'
+        if: github.event_name != 'pull_request' && secrets.QUAY_USER != '' && secrets.QUAY_TOKEN != ''
         uses: docker/login-action@v3
         with:
           registry: quay.io
@@ -473,8 +473,8 @@ jobs:
         with:
           images: |
             ghcr.io/${{ github.repository_owner }}/rootfs
-            ${{ github.repository_owner == 'openwrt' && 'docker.io/openwrt/rootfs' || '' }}
-            ${{ github.repository_owner == 'openwrt' && 'quay.io/openwrt/rootfs' || '' }}
+            ${{ secrets.DOCKER_USER != '' && format('docker.io/{0}/rootfs', secrets.DOCKER_USER) || '' }}
+            ${{ secrets.QUAY_USER != '' && format('quay.io/{0}/rootfs', secrets.QUAY_USER) || '' }}
           flavor: |
             latest=false
             prefix=${{ github.event.inputs.prefix }}
