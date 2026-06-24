@@ -183,6 +183,11 @@ jobs:
     strategy:
       fail-fast: False
       matrix: ${{fromJson(needs.generate_matrix.outputs.imagebuilders)}}
+    env:
+      DOCKER_USER: ${{ secrets.DOCKER_USER }}
+      DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+      QUAY_USER: ${{ secrets.QUAY_USER }}
+      QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
 
     steps:
       - name: Login to GitHub Container Registry
@@ -194,14 +199,14 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Login to Docker.io Container Registry
-        if: github.event_name != 'pull_request' && secrets.DOCKER_USER != '' && secrets.DOCKER_TOKEN != ''
+        if: github.event_name != 'pull_request' && env.DOCKER_USER != '' && env.DOCKER_TOKEN != ''
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Login to Quay.io Container Registry
-        if: github.event_name != 'pull_request' && secrets.QUAY_USER != '' && secrets.QUAY_TOKEN != ''
+        if: github.event_name != 'pull_request' && env.QUAY_USER != '' && env.QUAY_TOKEN != ''
         uses: docker/login-action@v3
         with:
           registry: quay.io
@@ -214,8 +219,8 @@ jobs:
         with:
           images: |
             ghcr.io/${{ github.repository_owner }}/imagebuilder
-            ${{ secrets.DOCKER_USER != '' && format('docker.io/{0}/imagebuilder', secrets.DOCKER_USER) || '' }}
-            ${{ secrets.QUAY_USER != '' && format('quay.io/{0}/imagebuilder', secrets.QUAY_USER) || '' }}
+            ${{ env.DOCKER_USER != '' && format('docker.io/{0}/imagebuilder', env.DOCKER_USER) || '' }}
+            ${{ env.QUAY_USER != '' && format('quay.io/{0}/imagebuilder', env.QUAY_USER) || '' }}
           flavor: |
             latest=false
             prefix=${{ github.event.inputs.prefix }}
@@ -275,6 +280,11 @@ jobs:
     strategy:
       fail-fast: False
       matrix: ${{fromJson(needs.generate_matrix.outputs.sdks)}}
+    env:
+      DOCKER_USER: ${{ secrets.DOCKER_USER }}
+      DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+      QUAY_USER: ${{ secrets.QUAY_USER }}
+      QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
 
     steps:
       - name: Login to GitHub Container Registry
@@ -286,14 +296,14 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Login to Docker.io Container Registry
-        if: github.event_name != 'pull_request' && secrets.DOCKER_USER != '' && secrets.DOCKER_TOKEN != ''
+        if: github.event_name != 'pull_request' && env.DOCKER_USER != '' && env.DOCKER_TOKEN != ''
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Login to Quay.io Container Registry
-        if: github.event_name != 'pull_request' && secrets.QUAY_USER != '' && secrets.QUAY_TOKEN != ''
+        if: github.event_name != 'pull_request' && env.QUAY_USER != '' && env.QUAY_TOKEN != ''
         uses: docker/login-action@v3
         with:
           registry: quay.io
@@ -306,8 +316,8 @@ jobs:
         with:
           images: |
             ghcr.io/${{ github.repository_owner }}/sdk
-            ${{ secrets.DOCKER_USER != '' && format('docker.io/{0}/sdk', secrets.DOCKER_USER) || '' }}
-            ${{ secrets.QUAY_USER != '' && format('quay.io/{0}/sdk', secrets.QUAY_USER) || '' }}
+            ${{ env.DOCKER_USER != '' && format('docker.io/{0}/sdk', env.DOCKER_USER) || '' }}
+            ${{ env.QUAY_USER != '' && format('quay.io/{0}/sdk', env.QUAY_USER) || '' }}
           flavor: |
             latest=false
             prefix=${{ github.event.inputs.prefix }}
@@ -320,8 +330,8 @@ jobs:
         with:
           images: |
             ghcr.io/${{ github.repository_owner }}/sdk
-            ${{ secrets.DOCKER_USER != '' && format('docker.io/{0}/sdk', secrets.DOCKER_USER) || '' }}
-            ${{ secrets.QUAY_USER != '' && format('quay.io/{0}/sdk', secrets.QUAY_USER) || '' }}
+            ${{ env.DOCKER_USER != '' && format('docker.io/{0}/sdk', env.DOCKER_USER) || '' }}
+            ${{ env.QUAY_USER != '' && format('quay.io/{0}/sdk', env.QUAY_USER) || '' }}
           flavor: |
             latest=false
             prefix=${{ github.event.inputs.prefix }}
@@ -335,8 +345,8 @@ jobs:
         with:
           images: |
             ghcr.io/${{ github.repository_owner }}/sdk
-            ${{ secrets.DOCKER_USER != '' && format('docker.io/{0}/sdk', secrets.DOCKER_USER) || '' }}
-            ${{ secrets.QUAY_USER != '' && format('quay.io/{0}/sdk', secrets.QUAY_USER) || '' }}
+            ${{ env.DOCKER_USER != '' && format('docker.io/{0}/sdk', env.DOCKER_USER) || '' }}
+            ${{ env.QUAY_USER != '' && format('quay.io/{0}/sdk', env.QUAY_USER) || '' }}
           flavor: |
             latest=false
             prefix=${{ github.event.inputs.prefix }}
@@ -350,8 +360,8 @@ jobs:
         with:
           images: |
             ghcr.io/${{ github.repository_owner }}/sdk
-            ${{ secrets.DOCKER_USER != '' && format('docker.io/{0}/sdk', secrets.DOCKER_USER) || '' }}
-            ${{ secrets.QUAY_USER != '' && format('quay.io/{0}/sdk', secrets.QUAY_USER) || '' }}
+            ${{ env.DOCKER_USER != '' && format('docker.io/{0}/sdk', env.DOCKER_USER) || '' }}
+            ${{ env.QUAY_USER != '' && format('quay.io/{0}/sdk', env.QUAY_USER) || '' }}
           flavor: |
             latest=false
             prefix=${{ github.event.inputs.prefix }}
@@ -364,8 +374,8 @@ jobs:
         with:
           images: |
             ghcr.io/${{ github.repository_owner }}/sdk
-            ${{ secrets.DOCKER_USER != '' && format('docker.io/{0}/sdk', secrets.DOCKER_USER) || '' }}
-            ${{ secrets.QUAY_USER != '' && format('quay.io/{0}/sdk', secrets.QUAY_USER) || '' }}
+            ${{ env.DOCKER_USER != '' && format('docker.io/{0}/sdk', env.DOCKER_USER) || '' }}
+            ${{ env.QUAY_USER != '' && format('quay.io/{0}/sdk', env.QUAY_USER) || '' }}
           tags: latest
 
       - name: Build
@@ -433,6 +443,11 @@ jobs:
     strategy:
       fail-fast: False
       matrix: ${{fromJson(needs.generate_matrix.outputs.rootfs)}}
+    env:
+      DOCKER_USER: ${{ secrets.DOCKER_USER }}
+      DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+      QUAY_USER: ${{ secrets.QUAY_USER }}
+      QUAY_TOKEN: ${{ secrets.QUAY_TOKEN }}
 
     steps:
       - name: Set up QEMU
@@ -453,14 +468,14 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Login to Docker.io Container Registry
-        if: github.event_name != 'pull_request' && secrets.DOCKER_USER != '' && secrets.DOCKER_TOKEN != ''
+        if: github.event_name != 'pull_request' && env.DOCKER_USER != '' && env.DOCKER_TOKEN != ''
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_TOKEN }}
 
       - name: Login to Quay.io Container Registry
-        if: github.event_name != 'pull_request' && secrets.QUAY_USER != '' && secrets.QUAY_TOKEN != ''
+        if: github.event_name != 'pull_request' && env.QUAY_USER != '' && env.QUAY_TOKEN != ''
         uses: docker/login-action@v3
         with:
           registry: quay.io
@@ -473,8 +488,8 @@ jobs:
         with:
           images: |
             ghcr.io/${{ github.repository_owner }}/rootfs
-            ${{ secrets.DOCKER_USER != '' && format('docker.io/{0}/rootfs', secrets.DOCKER_USER) || '' }}
-            ${{ secrets.QUAY_USER != '' && format('quay.io/{0}/rootfs', secrets.QUAY_USER) || '' }}
+            ${{ env.DOCKER_USER != '' && format('docker.io/{0}/rootfs', env.DOCKER_USER) || '' }}
+            ${{ env.QUAY_USER != '' && format('quay.io/{0}/rootfs', env.QUAY_USER) || '' }}
           flavor: |
             latest=false
             prefix=${{ github.event.inputs.prefix }}
